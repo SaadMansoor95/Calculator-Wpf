@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Calculator.BasicLogic;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Calculator
@@ -24,70 +25,75 @@ namespace Calculator
         {
             double newNumber;
 
-            if (double.TryParse(resultLabel.Content.ToString(), out newNumber))
+            if (double.TryParse(resultLabel.Text.ToString(), out newNumber))
             {
                 switch (selectedOperator)
                 {
-                    case SelectedOperator.Addition:
+                    case SelectedOperator.ADDITION:
                         result = Compute.Add(lastNumber, newNumber);
                         break;
-                    case SelectedOperator.Subtraction:
+                    case SelectedOperator.SUBTRACTION:
                         result = Compute.Subtract(lastNumber, newNumber);
                         break;
-                    case SelectedOperator.Multiplication:
+                    case SelectedOperator.MULTIPLICATION:
                         result = Compute.Multiple(lastNumber, newNumber);
                         break;
-                    case SelectedOperator.Division:
+                    case SelectedOperator.DIVISION:
                         result = Compute.Divede(lastNumber, newNumber);
                         break;
                     default:
                         break;
                 }
             }
-            resultLabel.Content = result;
+            resultLabel.Text = result.ToString();
         }
 
         private void PercentButton_Click(object sender, RoutedEventArgs e)
         {
             double tempNumber;
-            if (double.TryParse(resultLabel.Content.ToString(), out tempNumber))
+            if (double.TryParse(resultLabel.Text.ToString(), out tempNumber))
             {
                 tempNumber = (tempNumber / 100);
 
                 if (lastNumber != 0)
                     tempNumber *= lastNumber;
 
-                resultLabel.Content = tempNumber.ToString();
+                resultLabel.Text = tempNumber.ToString();
             }
         }
 
         private void NegativeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (double.TryParse(resultLabel.Content.ToString(), out lastNumber))
+            if (double.TryParse(resultLabel.Text.ToString(), out lastNumber))
             {
+                if (lastNumber.Equals(0))
+                    return;
+
                 lastNumber = lastNumber * -1;
-                resultLabel.Content = lastNumber.ToString();
+                resultLabel.Text = lastNumber.ToString();
             }
         }
 
         private void AcButton_Click(object sender, RoutedEventArgs e)
         {
-            resultLabel.Content = "0";
+            resultLabel.Text = "0";
+            lastNumber = 0;
+            result = 0;
         }
 
         private void operationButton_Click(object sender, RoutedEventArgs e)
         {
-            if (double.TryParse(resultLabel.Content.ToString(), out lastNumber))
-                resultLabel.Content = "0";
+            if (double.TryParse(resultLabel.Text.ToString(), out lastNumber))
+                resultLabel.Text = "0";
 
             var pressedButton = (Button)sender;
 
             switch (pressedButton.Name)
             {
-                case nameof(plusButton): selectedOperator = SelectedOperator.Addition; break;
-                case nameof(minusButton): selectedOperator = SelectedOperator.Subtraction; break;
-                case nameof(multipleButton): selectedOperator = SelectedOperator.Multiplication; break;
-                case nameof(divideButton): selectedOperator = SelectedOperator.Division; break;
+                case nameof(plusButton): selectedOperator = SelectedOperator.ADDITION; break;
+                case nameof(minusButton): selectedOperator = SelectedOperator.SUBTRACTION; break;
+                case nameof(multipleButton): selectedOperator = SelectedOperator.MULTIPLICATION; break;
+                case nameof(divideButton): selectedOperator = SelectedOperator.DIVISION; break;
                 default:
                     break;
             }
@@ -95,8 +101,8 @@ namespace Calculator
 
         private void pointButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!resultLabel.Content.ToString().Contains("."))
-                resultLabel.Content = $"{resultLabel.Content}.";
+            if (!resultLabel.Text.ToString().Contains("."))
+                resultLabel.Text = $"{resultLabel.Text}.";
         }
 
         private void numberButton_Click(object sender, RoutedEventArgs e)
@@ -122,48 +128,14 @@ namespace Calculator
                     break;
             }*/
 
-            //Another way simply get sender Content
+            //Another way simply get sender Text
 
             int selectedValue = int.Parse((sender as Button).Content.ToString());
 
-            if (resultLabel.Content.ToString() == "0")
-                resultLabel.Content = selectedValue;
+            if (resultLabel.Text.ToString() == "0")
+                resultLabel.Text = selectedValue.ToString();
             else
-                resultLabel.Content = $"{resultLabel.Content}{selectedValue}";
-        }
-    }
-
-    public enum SelectedOperator
-    {
-        Addition,
-        Subtraction,
-        Multiplication,
-        Division,
-    }
-
-    public static class Compute
-    {
-        public static double Add(double first, double second)
-        {
-            return first + second;
-        }
-        public static double Subtract(double first, double second)
-        {
-            return first - second;
-        }
-        public static double Multiple(double first, double second)
-        {
-            return first * second;
-        }
-        public static double Divede(double first, double second)
-        {
-            if (second == 0)
-            {
-                MessageBox.Show("Cannot divide by 0", "Wrong Operation", MessageBoxButton.OK, MessageBoxImage.Error);
-                return 0;
-            }
-
-            return first / second;
+                resultLabel.Text = $"{resultLabel.Text}{selectedValue}";
         }
     }
 }

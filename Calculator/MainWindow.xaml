@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calculator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="300">
+        Title="Calculator" 
+        Height="600" Width="300" 
+        MaxHeight="600"
+        MinHeight="600"
+        MinWidth="300">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -21,8 +25,10 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label x:Name="resultLabel"
-               Content="0"
+        <TextBlock x:Name="resultLabel"
+               DockPanel.Dock="Right"
+               FontSize="60"
+               Text="0"
                Grid.ColumnSpan="4"
                HorizontalAlignment="Right"
                VerticalAlignment="Bottom"/>
